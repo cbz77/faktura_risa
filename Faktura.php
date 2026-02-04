@@ -52,12 +52,12 @@ class Faktura
         $pdf->SetXY(7,20);
 
         $pdf->SetFont('font','B',12);
-        $pdf->Cell(95,6,textUtf8Win1250($dod['jmeno']),0,1);
+        $pdf->Cell(95,6,$dod['jmeno'],0,1);
 
         $pdf->SetFont('font','',10);
-        $pdf->Cell(95,5,textUtf8Win1250($dod['ulice']),0,1);
-        $pdf->Cell(95,5,textUtf8Win1250($dod['psc'].' '.$dod['mesto']),0,1);
-        $pdf->Cell(95,5,textUtf8Win1250($dod['stat']),0,1);
+        $pdf->Cell(95,5,$dod['ulice'],0,1);
+        $pdf->Cell(95,5,$dod['psc'].' '.$dod['mesto'],0,1);
+        $pdf->Cell(95,5,$dod['stat'],0,1);
 
         $pdf->Ln(2);
         $pdf->Cell(95,5,'IÈO: '.$dod['ico'],0,1);
@@ -82,16 +82,16 @@ class Faktura
         $pdf->SetFont('font','',11);
 
         $pdf->SetX(107);
-        $pdf->Cell(90,6,textUtf8Win1250($odb['jmeno']),0,1);
+        $pdf->Cell(90,6,$odb['jmeno'],0,1);
 
         $pdf->SetX(107);
-        $pdf->Cell(90,6,textUtf8Win1250($odb['ulice']),0,1);
+        $pdf->Cell(90,6,$odb['ulice'],0,1);
 
         $pdf->SetX(107);
-        $pdf->Cell(90,6,textUtf8Win1250($odb['psc'].' '.$odb['mesto']),0,1);
+        $pdf->Cell(90,6,$odb['psc'].' '.$odb['mesto'],0,1);
 
         $pdf->SetX(107);
-        $pdf->Cell(90,6,textUtf8Win1250($odb['stat']),0,1);
+        $pdf->Cell(90,6,$odb['stat'],0,1);
 
         // dodací adresa
         if (!empty($data['dodaci_adresa']))
@@ -106,13 +106,13 @@ class Faktura
             $pdf->SetFont('font','',11);
 
             $pdf->SetX(107);
-            $pdf->Cell(90,6,textUtf8Win1250($da['jmeno']),0,1);
+            $pdf->Cell(90,6,$da['jmeno'],0,1);
 
             $pdf->SetX(107);
-            $pdf->Cell(90,6,textUtf8Win1250($da['ulice']),0,1);
+            $pdf->Cell(90,6,$da['ulice'],0,1);
 
             $pdf->SetX(107);
-            $pdf->Cell(90,6,textUtf8Win1250($da['psc'].' '.$da['mesto']),0,1);
+            $pdf->Cell(90,6,$da['psc'].' '.$da['mesto'],0,1);
         }
 
         /* ===== øádek dat ===== */
@@ -168,7 +168,7 @@ class Faktura
             $yStart = $pdf->GetY();
 
             // Popis – MultiCell
-            $pdf->MultiCell(95,6,textUtf8Win1250($polozka['popis']),1);
+            $pdf->MultiCell(95,6,$polozka['popis'],1);
 
             $height = $pdf->GetY() - $yStart;
 
@@ -217,7 +217,7 @@ class Faktura
             $pdf->MultiCell(
                 0,
                 5,
-                textUtf8Win1250($data['poznamka'])
+                $data['poznamka']
             );
         }
     }
@@ -327,7 +327,7 @@ class Faktura
         $pdf->MultiCell(
             $colWidth - 6,
             5,
-            textUtf8Win1250($s['slovy']),
+            $s['slovy'],
             0,
             'R'
         );
