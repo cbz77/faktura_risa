@@ -2,148 +2,164 @@
 
 class Faktura
 {
-     private const POLOZEK_NA_STRANKU = 10;
 
-    /**
-     * Vygeneruje PDF faktury (layout ve stylu dodacího listu)
-     */
+    private const POLOZEK_NA_STRANKU = 10;
+
     public static function create(FPDF $pdf, array $data): void
     {
         $pdf->AddPage();
-        $pdf->SetMargins(15, 15, 15);
-        $pdf->SetAutoPageBreak(true, 20);
+        $pdf->SetAutoPageBreak(false);
 
-        self::renderHeader($pdf, $data);
-        self::renderOdberatel($pdf, $data);
-        self::renderPolozky($pdf, $data);
-        self::renderSoucty($pdf, $data);
-        self::renderFooter($pdf, $data);
+        self::frame($pdf);
+        self::header($pdf,$data);
+        self::infoBoxes($pdf,$data);
+        self::renderPolozky($pdf,$data);
+        self::bottom($pdf,$data);
     }
 
-    /* ============================================================
-     * HLAVIÈKA
-     * ============================================================ */
-    private static function renderHeader(FPDF $pdf, array $data): void
+    /* ========================================================== */
+    private static function frame(FPDF $pdf)
     {
-        // NÁZEV DOKLADU
-        $pdf->SetFont('font', 'B', 16);
-        $pdf->Cell(
-            0,
-            8,
-            textUtf8Win1250('FAKTURA ' . $data['cislo_dokladu']),
-            0,
-            1,
-            'L'
-        );
-        $pdf->Ln(2);
+        $pdf->SetLineWidth(0.6);
+        $pdf->Rect(5,5,200,287);
+    }
 
-        // DODAVATEL
+    /* ========================================================== */
+    private static function header(FPDF $pdf,$data)
+    {
+        $pdf->SetFont('font','B',16);
+
+        $pdf->SetXY(7,8);
+        $pdf->Cell(100,8,'DODACÍ LIST',0,0);
+
+        $pdf->SetFont('font','',14);
+        $pdf->Cell(90,8,$data['cislo_dokladu'],0,1,'R');
+
+        // horní box
+        $pdf->Rect(5,18,200,75);
+    }
+
+    /* ========================================================== */
+    private static function infoBoxes(FPDF $pdf,$data)
+    {
         $dod = $data['dodavatel'];
-
-        $pdf->SetFont('font', 'B', 10);
-        $pdf->Cell(0, 5, textUtf8Win1250($dod['jmeno']), 0, 1);
-
-        $pdf->SetFont('font', '', 9);
-        $pdf->Cell(0, 4, textUtf8Win1250($dod['ulice']), 0, 1);
-        $pdf->Cell(0, 4, textUtf8Win1250($dod['psc'] . ' ' . $dod['mesto']), 0, 1);
-        $pdf->Cell(0, 4, textUtf8Win1250($dod['stat']), 0, 1);
-
-        $pdf->Ln(1);
-        $pdf->Cell(0, 4, 'IÈO: ' . $dod['ico'] . ' | DIÈ: ' . $dod['dic'], 0, 1);
-
-        if (!empty($dod['telefon']) || !empty($dod['email'])) {
-            $pdf->Cell(
-                0,
-                4,
-                'TEL: ' . $dod['telefon'] . ' | EMAIL: ' . $dod['email'],
-                0,
-                1
-            );
-        }
-
-        if (!empty($dod['web'])) {
-            $pdf->Cell(0, 4, 'WEB: ' . $dod['web'], 0, 1);
-        }
-
-        if (!empty($dod['registrace'])) {
-            $pdf->Ln(1);
-            $pdf->MultiCell(0, 4, textUtf8Win1250($dod['registrace']));
-        }
-
-        // BANKA
-        if (!empty($data['banka'])) {
-            $banka = $data['banka'];
-            $pdf->Ln(3);
-            $pdf->Cell(0, 4, 'ÚÈET: ' . $banka['ucet'], 0, 1);
-            $pdf->Cell(0, 4, 'BANKA: ' . $banka['nazev'], 0, 1);
-            $pdf->Cell(0, 4, 'IBAN: ' . $banka['iban'], 0, 1);
-            $pdf->Cell(0, 4, 'SWIFT: ' . $banka['swift'], 0, 1);
-        }
-
-        $pdf->Ln(6);
-    }
-
-    /* ============================================================
-     * ODBÌRATEL + DODACÍ ADRESA
-     * ============================================================ */
-    private static function renderOdberatel(FPDF $pdf, array $data): void
-    {
-        // ODBÌRATEL
-        $pdf->SetFont('font', 'B', 10);
-        $pdf->Cell(0, 5, 'Fakturováno:', 0, 1);
-
         $odb = $data['odberatel'];
 
-        $pdf->SetFont('font', '', 9);
-        $pdf->Cell(0, 4, textUtf8Win1250($odb['jmeno']), 0, 1);
-        $pdf->Cell(0, 4, textUtf8Win1250($odb['ulice']), 0, 1);
-        $pdf->Cell(0, 4, textUtf8Win1250($odb['psc'] . ' ' . $odb['mesto']), 0, 1);
-        $pdf->Cell(0, 4, textUtf8Win1250($odb['stat']), 0, 1);
+        // rozdìlení boxu na 2 sloupce
+        $pdf->Line(105,18,105,93);
 
-        $pdf->Ln(4);
+        /* ===== DODAVATEL ===== */
+        $pdf->SetXY(7,20);
 
-        // DODACÍ ADRESA
-        if (!empty($data['dodaci_adresa'])) {
-            $pdf->SetFont('font', 'B', 10);
-            $pdf->Cell(0, 5, 'Dodací adresa:', 0, 1);
+        $pdf->SetFont('font','B',12);
+        $pdf->Cell(95,6,textUtf8Win1250($dod['jmeno']),0,1);
 
+        $pdf->SetFont('font','',10);
+        $pdf->Cell(95,5,textUtf8Win1250($dod['ulice']),0,1);
+        $pdf->Cell(95,5,textUtf8Win1250($dod['psc'].' '.$dod['mesto']),0,1);
+        $pdf->Cell(95,5,textUtf8Win1250($dod['stat']),0,1);
+
+        $pdf->Ln(2);
+        $pdf->Cell(95,5,'IÈO: '.$dod['ico'],0,1);
+        $pdf->Cell(95,5,'DIÈ: '.$dod['dic'],0,1);
+
+        if (!empty($data['banka']))
+        {
+            $b = $data['banka'];
+
+            $pdf->Ln(2);
+            $pdf->Cell(95,5,'ÚÈET: '.$b['ucet'],0,1);
+            $pdf->Cell(95,5,'IBAN: '.$b['iban'],0,1);
+            $pdf->Cell(95,5,'SWIFT: '.$b['swift'],0,1);
+        }
+
+        /* ===== ODBÌRATEL ===== */
+        $pdf->SetXY(107,20);
+
+        $pdf->SetFont('font','B',10);
+        $pdf->Cell(90,6,'Dodací list pro:',0,1);
+
+        $pdf->SetFont('font','',11);
+
+        $pdf->SetX(107);
+        $pdf->Cell(90,6,textUtf8Win1250($odb['jmeno']),0,1);
+
+        $pdf->SetX(107);
+        $pdf->Cell(90,6,textUtf8Win1250($odb['ulice']),0,1);
+
+        $pdf->SetX(107);
+        $pdf->Cell(90,6,textUtf8Win1250($odb['psc'].' '.$odb['mesto']),0,1);
+
+        $pdf->SetX(107);
+        $pdf->Cell(90,6,textUtf8Win1250($odb['stat']),0,1);
+
+        // dodací adresa
+        if (!empty($data['dodaci_adresa']))
+        {
             $da = $data['dodaci_adresa'];
 
-            $pdf->SetFont('font', '', 9);
-            $pdf->Cell(0, 4, textUtf8Win1250($da['jmeno']), 0, 1);
-            $pdf->Cell(0, 4, textUtf8Win1250($da['ulice']), 0, 1);
-            $pdf->Cell(0, 4, textUtf8Win1250($da['psc'] . ' ' . $da['mesto']), 0, 1);
+            $pdf->Ln(4);
+            $pdf->SetX(107);
+            $pdf->SetFont('font','B',10);
+            $pdf->Cell(90,6,'Dodací adresa:',0,1);
+
+            $pdf->SetFont('font','',11);
+
+            $pdf->SetX(107);
+            $pdf->Cell(90,6,textUtf8Win1250($da['jmeno']),0,1);
+
+            $pdf->SetX(107);
+            $pdf->Cell(90,6,textUtf8Win1250($da['ulice']),0,1);
+
+            $pdf->SetX(107);
+            $pdf->Cell(90,6,textUtf8Win1250($da['psc'].' '.$da['mesto']),0,1);
         }
 
-        $pdf->Ln(4);
+        /* ===== øádek dat ===== */
+        $pdf->Rect(5,93,200,15);
 
-        // DATA DOKLADU
-        $pdf->Cell(0, 4, 'Datum vystavení: ' . $data['datum_vystaveni'], 0, 1);
+        $pdf->Line(68,93,68,108);
+        $pdf->Line(131,93,131,108);
 
-        if (!empty($data['objednavka_cislo'])) {
-            $pdf->Cell(0, 4, 'Objednávka èíslo: ' . $data['objednavka_cislo'], 0, 1);
-        }
+        $pdf->SetXY(7,95);
+        $pdf->SetFont('font','',10);
 
-        if (!empty($data['faktura_cislo'])) {
-            $pdf->Cell(0, 4, 'Faktura èíslo: ' . $data['faktura_cislo'], 0, 1);
-        }
+        $pdf->Cell(61,5,'Datum vystavení',0,0);
+        $pdf->Cell(63,5,'Objednávka èíslo',0,0);
+        $pdf->Cell(63,5,'Faktura èíslo',0,1);
 
-        $pdf->Ln(6);
+        $pdf->SetX(7);
+
+        $pdf->SetFont('font','B',10);
+        $pdf->Cell(61,7,$data['datum_vystaveni'],0,0);
+        $pdf->Cell(63,7,$data['objednavka_cislo'] ?? '',0,0);
+        $pdf->Cell(63,7,$data['faktura_cislo'] ?? '',0,1);
     }
 
-    /* ============================================================
-     * TABULKA POLOŽEK
-     * ============================================================ */
-    private static function renderPolozky(FPDF $pdf, array $data): void
+    private static function renderPolozkyHeader(FPDF $pdf): void
+    {
+        $pdf->SetFont('font','B',9);
+
+        $pdf->Cell(95,7,'Popis položky',1);
+        $pdf->Cell(15,7,'Množství',1,0,'R');
+        $pdf->Cell(10,7,'MJ',1,0,'C');
+        $pdf->Cell(25,7,'Cena za MJ',1,0,'R');
+        $pdf->Cell(30,7,'Celkem bez DPH',1,0,'R');
+        $pdf->Cell(10,7,'DPH',1,0,'R');
+        $pdf->Cell(30,7,'Celkem s DPH',1,1,'R');
+
+        $pdf->SetFont('font','',9);
+    }
+
+    /* ========================================================== */
+   private static function renderPolozky(FPDF $pdf, array $data): void
     {
         $pocitadlo = 0;
 
-        // HLAVIÈKA TABULKY (1. STRÁNKA)
         self::renderPolozkyHeader($pdf);
 
         foreach ($data['polozky'] as $polozka) {
 
-            // ?? NOVÁ STRÁNKA PO 10 POLOŽKÁCH
             if ($pocitadlo > 0 && $pocitadlo % self::POLOZEK_NA_STRANKU === 0) {
                 $pdf->AddPage();
                 self::renderPolozkyHeader($pdf);
@@ -151,86 +167,172 @@ class Faktura
 
             $yStart = $pdf->GetY();
 
-            $pdf->MultiCell(70, 5, textUtf8Win1250($polozka['popis']));
+            // Popis – MultiCell
+            $pdf->MultiCell(95,6,textUtf8Win1250($polozka['popis']),1);
+
             $height = $pdf->GetY() - $yStart;
 
-            $pdf->SetXY(85, $yStart);
-            $pdf->Cell(15, $height, $polozka['mnozstvi'], 0, 0, 'R');
-            $pdf->Cell(10, $height, $polozka['mj'], 0, 0, 'R');
-            $pdf->Cell(25, $height, number_format($polozka['cena_za_mj'], 2, ',', ' '), 0, 0, 'R');
-            $pdf->Cell(30, $height, number_format($polozka['bez_dph'], 2, ',', ' '), 0, 0, 'R');
-            $pdf->Cell(10, $height, $polozka['dph_sazba'] . '%', 0, 0, 'R');
-            $pdf->Cell(30, $height, number_format($polozka['s_dph'], 2, ',', ' '), 0, 1, 'R');
+            $pdf->SetXY(110,$yStart);
+
+            $pdf->Cell(15,$height,$polozka['mnozstvi'],1,0,'R');
+            $pdf->Cell(10,$height,$polozka['mj'],1,0,'C');
+            $pdf->Cell(25,$height,number_format($polozka['cena_za_mj'],2,',',' '),1,0,'R');
+            $pdf->Cell(30,$height,number_format($polozka['bez_dph'],2,',',' '),1,0,'R');
+            $pdf->Cell(10,$height,$polozka['dph_sazba'].'%',1,0,'R');
+            $pdf->Cell(30,$height,number_format($polozka['s_dph'],2,',',' '),1,1,'R');
 
             $pocitadlo++;
         }
+
+        /*
+        ========================
+        ØÁDEK CELKEM
+        ========================
+        */
+
+        $s = $data['soucty'];
+
+        $pdf->SetFont('font','B',9);
+
+        // slouèené první 4 sloupce
+        $pdf->Cell(95+15+10+25,7,'Celkem:',1,0,'R');
+
+        // souèty
+        $pdf->Cell(30,7,number_format($s['bez_dph'],2,',',' '),1,0,'R');
+        $pdf->Cell(10,7,number_format($s['dph'],2,',',' '),1,0,'R');
+        $pdf->Cell(30,7,number_format($s['s_dph'],2,',',' '),1,1,'R');
+
+        $pdf->SetFont('font','',9);
+
+        /*
+        ========================
+        POZNÁMKA POD TABULKOU
+        ========================
+        */
+
+        if (!empty($data['poznamka'])) {
+
+            $pdf->Ln(4);
+
+            $pdf->MultiCell(
+                0,
+                5,
+                textUtf8Win1250($data['poznamka'])
+            );
+        }
     }
 
-    /* ============================================================
-     * HLAVIÈKA TABULKY POLOŽEK (ZNOVUPOUŽITELNÁ)
-     * ============================================================ */
-     private static function renderPolozkyHeader(FPDF $pdf): void
-    {
-        $pdf->SetFont('font', 'B', 9);
-        $pdf->Cell(70, 6, 'Popis položky');
-        $pdf->Cell(15, 6, 'Množství', 0, 0, 'R');
-        $pdf->Cell(10, 6, 'MJ', 0, 0, 'R');
-        $pdf->Cell(25, 6, 'Cena/MJ', 0, 0, 'R');
-        $pdf->Cell(30, 6, 'Bez DPH', 0, 0, 'R');
-        $pdf->Cell(10, 6, 'DPH', 0, 0, 'R');
-        $pdf->Cell(30, 6, 'Celkem s DPH', 0, 1, 'R');
-
-        $pdf->Line(15, $pdf->GetY(), 195, $pdf->GetY());
-        $pdf->SetFont('font', '', 9);
-    }
-
-    /* ============================================================
-     * SOUÈTY
-     * ============================================================ */
-    private static function renderSoucty(FPDF $pdf, array $data): void
+    /* ========================================================== */
+    private static function bottom(FPDF $pdf,$data)
     {
         $s = $data['soucty'];
 
-        $pdf->Ln(6);
-        $pdf->SetFont('font', '', 9);
+        $y = 225;
 
-        $pdf->Cell(120);
-        $pdf->Cell(40, 5, 'Celkem bez DPH:', 0, 0, 'R');
-        $pdf->Cell(35, 5, number_format($s['bez_dph'], 2, ',', ' ') . ' Kè', 0, 1, 'R');
+        $pageX = 5;
+        $pageWidth = 200;
+        $colWidth = $pageWidth / 3;
 
-        $pdf->Cell(120);
-        $pdf->Cell(40, 5, 'DPH:', 0, 0, 'R');
-        $pdf->Cell(35, 5, number_format($s['dph'], 2, ',', ' ') . ' Kè', 0, 1, 'R');
+        $col1 = $pageX;
+        $col2 = $pageX + $colWidth;
+        $col3 = $pageX + ($colWidth * 2);
 
-        $pdf->SetFont('font', 'B', 10);
-        $pdf->Cell(120);
-        $pdf->Cell(40, 6, 'Celkem s DPH:', 0, 0, 'R');
-        $pdf->Cell(35, 6, number_format($s['s_dph'], 2, ',', ' ') . ' Kè', 0, 1, 'R');
+        // ===== hlavní rám =====
+        $pdf->Rect($pageX,$y,$pageWidth,67);
 
-        $pdf->Ln(2);
-        $pdf->SetFont('font', '', 9);
-        $pdf->Cell(0, 5, textUtf8Win1250($s['slovy']));
-    }
+        // ===== vertikální dìlení =====
+        $pdf->Line($col2,$y,$col2,292);
+        $pdf->Line($col3,$y,$col3,292);
 
-    /* ============================================================
-     * PATIÈKA
-     * ============================================================ */
-    private static function renderFooter(FPDF $pdf, array $data): void
-    {
-        if (!empty($data['poznamka'])) {
-            $pdf->Ln(8);
-            $pdf->SetFont('font', '', 8);
-            $pdf->MultiCell(0, 4, textUtf8Win1250($data['poznamka']));
+
+        /*
+        =====================
+        LEVÝ SLOUPEC
+        =====================
+        */
+
+        $pdf->SetFont('font','',10);
+        $pdf->SetXY($col1 + 3,$y + 5);
+        $pdf->Cell($colWidth - 6,6,'Vyhotovil:',0,1);
+
+        if(!empty($data['razitko']))
+        {
+            $pdf->Image(
+                $data['razitko'],
+                $col1 + 10,
+                $y + 15,
+                $colWidth - 20
+            );
         }
 
-        $pdf->Ln(10);
-        $pdf->SetFont('font', '', 9);
 
-        $pdf->Cell(80, 5, 'Vystavil:', 0, 0);
-        $pdf->Cell(80, 5, 'Pøevzal:', 0, 1);
+        /*
+        =====================
+        STØED
+        =====================
+        */
 
-        $pdf->Ln(12);
-        $pdf->Cell(80, 5, '_________________________', 0, 0);
-        $pdf->Cell(80, 5, '_________________________', 0, 1);
+        $pdf->SetXY($col2 + 3,$y + 5);
+        $pdf->Cell($colWidth - 6,6,'Prevzal:',0,1);
+
+
+        /*
+        =====================
+        PRAVÝ SLOUPEC – SOUÈTY
+        =====================
+        */
+
+        $x = $col3 + 3;
+        $yy = $y + 5;
+
+        $pdf->SetFont('font','',10);
+
+        // bez DPH
+        $pdf->SetXY($x,$yy);
+        $pdf->Cell($colWidth - 40,7,'Celková èástka bez DPH:',0,0);
+        $pdf->Cell(37,7,number_format($s['bez_dph'],2,',',' ').' Kè',0,1,'R');
+
+        // DPH
+        $yy += 7;
+        $pdf->SetXY($x,$yy);
+        $pdf->Cell($colWidth - 40,7,'DPH:',0,0);
+        $pdf->Cell(37,7,number_format($s['dph'],2,',',' ').' Kè',0,1,'R');
+
+        // s DPH
+        $yy += 7;
+        $pdf->SetXY($x,$yy);
+        $pdf->Cell($colWidth - 40,7,'Celková èástka s DPH:',0,0);
+        $pdf->Cell(37,7,number_format($s['s_dph'],2,',',' ').' Kè',0,1,'R');
+
+
+        // CELKEM
+        $yy += 12;
+
+        $pdf->SetXY($x,$yy);
+        $pdf->Cell($colWidth - 6,6,'Celkem:',0,1);
+
+        $yy += 6;
+
+        $pdf->SetFont('font','B',16);
+        $pdf->SetXY($x,$yy);
+        $pdf->Cell($colWidth - 6,9,
+            number_format($s['s_dph'],2,',',' ').' Kè',
+            0,1,'R'
+        );
+
+        $yy += 10;
+
+        $pdf->SetFont('font','',9);
+        $pdf->SetXY($x,$yy);
+        $pdf->MultiCell(
+            $colWidth - 6,
+            5,
+            textUtf8Win1250($s['slovy']),
+            0,
+            'R'
+        );
     }
+
+
+
 }

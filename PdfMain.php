@@ -25,7 +25,7 @@ class PdfMain extends FPDF
         $this->data_pro_fakturu = $data;
     }
 
-    // 👉 POUZE číslování stránek
+    // Page footer
     public function Footer()
     {
         $this->SetY(-15);
