@@ -12,7 +12,6 @@ class Faktura
 
         self::frame($pdf);
         self::header($pdf,$data);
-        self::infoBoxes($pdf,$data);
         self::renderPolozky($pdf,$data);
         self::bottom($pdf,$data);
     }
@@ -20,7 +19,8 @@ class Faktura
     /* ========================================================== */
     private static function frame(FPDF $pdf)
     {
-        $pdf->SetLineWidth(0.6);
+        $pdf->Image(__DIR__.'/carovy_kod.png', 80, 8, 50);
+        $pdf->SetLineWidth(0.3);
         $pdf->Rect(5,5,200,287);
     }
 
@@ -37,11 +37,7 @@ class Faktura
 
         // horní box
         $pdf->Rect(5,18,200,75);
-    }
 
-    /* ========================================================== */
-    private static function infoBoxes(FPDF $pdf,$data)
-    {
         $dod = $data['dodavatel'];
         $odb = $data['odberatel'];
 
@@ -136,6 +132,8 @@ class Faktura
         $pdf->Cell(63,7,$data['faktura_cislo'] ?? '',0,1);
     }
 
+    /* ========================================================== */
+
     private static function renderPolozkyHeader(FPDF $pdf): void
     {
         $pdf->SetFont('font','B',9);
@@ -162,6 +160,8 @@ class Faktura
 
             if ($pocitadlo > 0 && $pocitadlo % self::POLOZEK_NA_STRANKU === 0) {
                 $pdf->AddPage();
+                self::frame($pdf);
+                self::header($pdf,$data);
                 self::renderPolozkyHeader($pdf);
             }
 
@@ -172,7 +172,7 @@ class Faktura
 
             $height = $pdf->GetY() - $yStart;
 
-            $pdf->SetXY(110,$yStart);
+            $pdf->SetXY(100,$yStart);
 
             $pdf->Cell(15,$height,$polozka['mnozstvi'],1,0,'R');
             $pdf->Cell(10,$height,$polozka['mj'],1,0,'C');

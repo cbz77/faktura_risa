@@ -199,7 +199,6 @@ $data_pro_fakturu = [
 
     // PATIÈKA
     'poznamka' =>
-        'Dodavatel neodpovídá za škody vzniklé neodborným zacházením, skladováním nebo montáží materiálu.
-        Zboží zùstává vlastnictvím dodavatele až do úplného zaplacení všech pohledávek.',
+        'Dodavatel neodpovídá za škody vzniklé neodborným zacházením, skladováním nebo montáží materiálu. Zboží zùstává vlastnictvím dodavatele až do úplného zaplacení všech pohledávek.',
 ];
 
