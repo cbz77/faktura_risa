@@ -115,9 +115,9 @@ class Faktura
             $pdf->Cell($labelW,4,'ÚÈET:',0,0,'L');
             $pdf->Cell($valueW,4,$b['ucet'],0,1,'L');
 
-            $pdf->SetFont('font','B',9);
             $pdf->SetX($left);
             $pdf->Cell($labelW,4,'BANKA:',0,0,'L');
+            $pdf->SetFont('font','B',9);
             $pdf->Cell($valueW,4,$b['nazev'],0,1,'L');
 
             $pdf->SetFont('font','',9);
@@ -131,24 +131,25 @@ class Faktura
         }
 
         /* ===== ODBÌRATEL ===== */
-        $pdf->SetXY(107,30);
+        $pdf->SetXY(106,26);
 
         $pdf->SetFont('font','',9);
-        $pdf->Cell(90,6,'Dodací list pro:',0,1);
+        $pdf->Cell(90,5,'Dodací list pro:',0,1);
 
-        $pdf->SetFont('font','',11);
+        $pdf->SetFont('font','',14);
 
-        $pdf->SetX(107);
-        $pdf->Cell(90,6,$odb['jmeno'],0,1);
+        $pdf->SetXY(117, $pdf->getY() + 6);
+        $pdf->MultiCell(70,5,$odb['jmeno'],0,1);
 
-        $pdf->SetX(107);
-        $pdf->Cell(90,6,$odb['ulice'],0,1);
+        $pdf->SetX(117);
+        $pdf->SetFont('font','',12);
+        $pdf->Cell(90,5,$odb['ulice'],0,1);
 
-        $pdf->SetX(107);
-        $pdf->Cell(90,6,$odb['psc'].' '.$odb['mesto'],0,1);
+        $pdf->SetX(117);
+        $pdf->Cell(90,5,$odb['psc'].' '.$odb['mesto'],0,1);
 
-        $pdf->SetX(107);
-        $pdf->Cell(90,6,$odb['stat'],0,1);
+        $pdf->SetX(117);
+        $pdf->Cell(90,5,$odb['stat'],0,1);
 
         // dodací adresa
         if (!empty($data['dodaci_adresa']))
@@ -156,20 +157,20 @@ class Faktura
             $da = $data['dodaci_adresa'];
 
             $pdf->Ln(4);
-            $pdf->SetX(107);
+            $pdf->SetX(106);
             $pdf->SetFont('font','',9);
-            $pdf->Cell(90,6,'Dodací adresa:',0,1);
+            $pdf->Cell(90,5,'Dodací adresa:',0,1);
 
-            $pdf->SetFont('font','',11);
+            $pdf->SetFont('font','',12);
 
-            $pdf->SetX(107);
-            $pdf->Cell(90,6,$da['jmeno'],0,1);
+            $pdf->SetXY(117, $pdf->getY() + 2);
+            $pdf->Cell(90,5,$da['jmeno'],0,1);
 
-            $pdf->SetX(107);
-            $pdf->Cell(90,6,$da['ulice'],0,1);
+            $pdf->SetX(117);
+            $pdf->Cell(90,5,$da['ulice'],0,1);
 
-            $pdf->SetX(107);
-            $pdf->Cell(90,6,$da['psc'].' '.$da['mesto'],0,1);
+            $pdf->SetX(117);
+            $pdf->Cell(90,5,$da['psc'].' '.$da['mesto'],0,1);
         }
 
         /* ===== øádek dat ===== */
