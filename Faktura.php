@@ -261,7 +261,7 @@ class Faktura
     {
         $s = $data['soucty'];
 
-        $y = 225;
+        $y = 245;
 
         $pageX = 5;
         $pageWidth = 200;
@@ -272,7 +272,7 @@ class Faktura
         $col3 = $pageX + ($colWidth * 2);
 
         // ===== hlavní rám =====
-        $pdf->Rect($pageX,$y,$pageWidth,67);
+        $pdf->Rect($pageX,$y,$pageWidth,47);
 
         // ===== vertikální dìlení =====
         $pdf->Line($col2,$y,$col2,292);
@@ -307,7 +307,7 @@ class Faktura
         */
 
         $pdf->SetXY($col2 + 3,$y + 5);
-        $pdf->Cell($colWidth - 6,6,'Prevzal:',0,1);
+        $pdf->Cell($colWidth - 6,6,'Pøevzal:',0,1);
 
 
         /*
