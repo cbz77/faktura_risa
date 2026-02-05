@@ -64,43 +64,70 @@ class Faktura
 
         $pdf->MultiCell(65,4,$dod['registrace'],0,1);
 
+        $left   = 7;
+        $totalW = 65;
+        $labelW = 35;
+        $valueW = $totalW - $labelW;
+
         $pdf->SetFont('font','',11);
-        $pdf->SetX(7);
+        $pdf->SetX($left);
         $pdf->Ln(2);
 
-        $pdf->SetX(7);
-        $pdf->Cell(95,4,'IÈO: '.$dod['ico'],0,1);
-        $pdf->SetX(7);
-        $pdf->Cell(95,4,'DIÈ: '.$dod['dic'],0,1);
-        $pdf->SetX(7);
-        $pdf->Cell(95,4,$dod['platce_dph'],0,1);
+        // IÈO / DIÈ / plátce
+        $pdf->SetX($left);
+        $pdf->Cell($labelW,4,'IÈO:',0,0,'L');
+        $pdf->Cell($valueW,4,$dod['ico'],0,1,'L');
 
+        $pdf->SetX($left);
+        $pdf->Cell($labelW,4,'DIÈ:',0,0,'L');
+        $pdf->Cell($valueW,4,$dod['dic'],0,1,'L');
+
+        $pdf->SetX($left);
+        $pdf->Cell($labelW,4,$dod['platce_dph'],0,0,'L');
+        $pdf->Cell($valueW,4,'',0,1,'L');
+
+        $pdf->Ln(2);
+
+        // kontakt
         $pdf->SetFont('font','',9);
-        $pdf->SetX(7);
-        $pdf->Ln(2);
 
-        $pdf->SetX(7);
-        $pdf->Cell(95,4,'TELEFON: '.$dod['telefon'],0,1);
-        $pdf->SetX(7);
-        $pdf->Cell(95,4,'E-MAIL: '.$dod['email'],0,1);
-        $pdf->SetX(7);
-        $pdf->Cell(95,4,'WEB: '.$dod['web'],0,1);
+        $pdf->SetX($left);
+        $pdf->Cell($labelW,4,'TELEFON:',0,0,'L');
+        $pdf->Cell($valueW,4,$dod['telefon'],0,1,'L');
 
-        if (!empty($data['banka']))
-        {
+        $pdf->SetX($left);
+        $pdf->Cell($labelW,4,'E-MAIL:',0,0,'L');
+        $pdf->Cell($valueW,4,$dod['email'],0,1,'L');
+
+        $pdf->SetX($left);
+        $pdf->Cell($labelW,4,'WEB:',0,0,'L');
+        $pdf->Cell($valueW,4,$dod['web'],0,1,'L');
+
+        //banka
+
+        if (!empty($data['banka'])) {
+
             $b = $data['banka'];
 
             $pdf->Ln(2);
-            $pdf->SetX(7);
-            $pdf->Cell(95,4,'ÚÈET: '.$b['ucet'],0,1);
-            $pdf->SetX(7);
+
+            $pdf->SetX($left);
+            $pdf->Cell($labelW,4,'ÚÈET:',0,0,'L');
+            $pdf->Cell($valueW,4,$b['ucet'],0,1,'L');
+
             $pdf->SetFont('font','B',9);
-            $pdf->Cell(95,4,'BANKA: '.$b['nazev'],0,1);
-            $pdf->SetX(7);
+            $pdf->SetX($left);
+            $pdf->Cell($labelW,4,'BANKA:',0,0,'L');
+            $pdf->Cell($valueW,4,$b['nazev'],0,1,'L');
+
             $pdf->SetFont('font','',9);
-            $pdf->Cell(95,4,'IBAN: '.$b['iban'],0,1);
-            $pdf->SetX(7);
-            $pdf->Cell(95,4,'SWIFT: '.$b['swift'],0,1);
+            $pdf->SetX($left);
+            $pdf->Cell($labelW,4,'IBAN:',0,0,'L');
+            $pdf->Cell($valueW,4,$b['iban'],0,1,'L');
+
+            $pdf->SetX($left);
+            $pdf->Cell($labelW,4,'SWIFT:',0,0,'L');
+            $pdf->Cell($valueW,4,$b['swift'],0,1,'L');
         }
 
         /* ===== ODBÌRATEL ===== */
