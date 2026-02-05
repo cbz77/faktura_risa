@@ -19,24 +19,25 @@ class Faktura
     /* ========================================================== */
     private static function frame(FPDF $pdf, $data = null)
     {
-        $pdf->Image($data['img']['carovy_kod'], 4, 8, 50);
-        $pdf->SetLineWidth(0.3);
-        $pdf->Rect(5,15,200,277);
+        $pdf->Image($data['img']['carovy_kod'], 9, 8, 50);
+        $pdf->SetLineWidth(0.5);
+        $pdf->Rect(10,15,190,277);
     }
 
     /* ========================================================== */
     private static function header(FPDF $pdf,$data)
     {
+        $pdf->SetLineWidth(0.2);
         $pdf->SetFont('font','',16);
 
-        $pdf->SetXY(7,16);
+        $pdf->SetXY(12,16);
         $pdf->Cell(100,8,'DODACÍ LIST',0,0);
 
         $pdf->SetFont('font','',14);
-        $pdf->Cell(90,8,$data['cislo_dokladu'],0,1,'R');
+        $pdf->Cell(85,8,$data['cislo_dokladu'],0,1,'R');
 
         // horní box
-        $pdf->Rect(5,25,200,88);
+        $pdf->Rect(10,25,190,88);
 
         $dod = $data['dodavatel'];
         $odb = $data['odberatel'];
@@ -45,27 +46,27 @@ class Faktura
         $pdf->Line(105,25,105,113);
 
         /* ===== DODAVATEL ===== */
-        $pdf->SetXY(7,27);
+        $pdf->SetXY(12,27);
 
         $pdf->SetFont('font','',16);
         $pdf->Image($data['img']['logo'], $pdf->getX() + 70, $pdf->getY() + 5, 20);
         $pdf->Cell(95,7,$dod['jmeno'],0,1);
 
         $pdf->SetFont('font','',11);
-        $pdf->SetX(7);
+        $pdf->SetX(12);
         $pdf->Cell(95,4,$dod['ulice'],0,1);
-        $pdf->SetX(7);
+        $pdf->SetX(12);
         $pdf->Cell(95,4,$dod['psc'].' '.$dod['mesto'],0,1);
-        $pdf->SetX(7);
+        $pdf->SetX(12);
         $pdf->Cell(95,4,$dod['stat'],0,1);
 
         $pdf->SetFont('font','',10);
         $pdf->Ln(2);
-        $pdf->SetX(7);
+        $pdf->SetX(12);
 
         $pdf->MultiCell(65,4,$dod['registrace'],0,1);
 
-        $left   = 7;
+        $left   = 12;
         $totalW = 65;
         $labelW = 35;
         $valueW = $totalW - $labelW;
@@ -175,19 +176,19 @@ class Faktura
         }
 
         /* ===== øádek dat ===== */
-        $pdf->Rect(5,113,200,15);
+        $pdf->Rect(10,113,190,15);
 
         $pdf->Line(68,113,68,128);
         $pdf->Line(131,113,131,128);
 
-        $pdf->SetXY(7,114);
+        $pdf->SetXY(12,114);
         $pdf->SetFont('font','',9);
 
         $pdf->Cell(61,5,'Datum vystavení',0,0);
         $pdf->Cell(63,5,'Objednávka èíslo',0,0);
         $pdf->Cell(63,5,'Faktura èíslo',0,1);
 
-        $pdf->SetX(7);
+        $pdf->SetX(12);
 
         $pdf->SetFont('font','',12);
         $pdf->Cell(61,7,$data['datum_vystaveni'],0,0, 'C');
@@ -199,10 +200,10 @@ class Faktura
 
     private static function renderPolozkyHeader(FPDF $pdf): void
     {
-        $w = [80,15,10,20,25,20,20];
+        $w = [70,15,10,20,25,20,20];
 
         $pdf->SetFont('font','',8);
-        $pdf->SetX(10);
+        $pdf->SetX(15);
 
         $pdf->Cell($w[0],7,'Popis položky',1,0,'C');
         $pdf->Cell($w[1],7,'Množství',1,0,'C');
@@ -218,11 +219,12 @@ class Faktura
     /* ========================================================== */
    private static function renderPolozky(FPDF $pdf, array $data): void
     {
+        $pdf->SetLineWidth(0.2);
         $pocitadlo = 0;
-        $w = [80,15,10,20,25,20,20];
+        $w = [70,15,10,20,25,20,20];
 
         // poèáteèní pozice tabulky
-        $pdf->SetXY(7,130);
+        $pdf->SetXY(30,130);
 
         self::renderPolozkyHeader($pdf);
 
@@ -232,13 +234,15 @@ class Faktura
                 $pdf->AddPage();
                 self::frame($pdf, $data);
                 self::header($pdf,$data);
-                $pdf->SetXY(7,130);
+                $pdf->SetXY(30,130);
                 self::renderPolozkyHeader($pdf);
             }
 
-            $xStart = $pdf->GetX();
+            $left = 15;
+            $xStart = $left;
             $yStart = $pdf->GetY();
 
+            $pdf->SetX($left);
             $pdf->MultiCell($w[0],6,$polozka['popis'],1);
 
             $h = $pdf->GetY() - $yStart;
@@ -265,7 +269,8 @@ class Faktura
 
         $pdf->SetFont('font','',9);
 
-        $pdf->Cell(80+15+10+20,7,'Celkem:',1,0,'R');
+        $pdf->SetX($left);
+        $pdf->Cell(70+15+10+20,7,'Celkem:',1,0,'R');
         $pdf->Cell(25,7,number_format($s['bez_dph'],2,',',' '),1,0,'C');
         $pdf->Cell(20,7,number_format($s['dph'],2,',',' '),1,0,'C');
         $pdf->Cell(20,7,number_format($s['s_dph'],2,',',' '),1,1,'C');
@@ -280,7 +285,8 @@ class Faktura
 
         if (!empty($data['poznamka'])) {
             $pdf->Ln(4);
-            $pdf->MultiCell(0,5,$data['poznamka']);
+            $pdf->SetX($left);
+            $pdf->MultiCell(150,5,$data['poznamka']);
         }
     }
 
@@ -292,8 +298,8 @@ class Faktura
 
         $y = 245;
 
-        $pageX = 5;
-        $pageWidth = 200;
+        $pageX = 10;
+        $pageWidth = 190;
         $colWidth = $pageWidth / 3;
 
         $col1 = $pageX;
