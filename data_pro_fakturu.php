@@ -6,8 +6,8 @@ $data_pro_fakturu = [
     'cislo_dokladu' => 'DL-2023-0001',
     'typ_dokladu' => 'faktura',
     'datum_vystaveni' => '28.4.2023',
-    'objednavka_cislo' => null,
-    'faktura_cislo' => null,
+    'objednavka_cislo' => '123456-XYZ-1234567890',
+    'faktura_cislo' => '123456-XYZ-1234567890',
 
     // DODAVATEL
     'dodavatel' => [
@@ -198,7 +198,12 @@ $data_pro_fakturu = [
     ],
 
     // PATIÈKA
-    'poznamka' =>
-        'Dodavatel neodpovídá za škody vzniklé neodborným zacházením, skladováním nebo montáží materiálu. Zboží zùstává vlastnictvím dodavatele až do úplného zaplacení všech pohledávek.',
+    'poznamka' => 'Dodavatel neodpovídá za škody vzniklé neodborným zacházením, skladováním nebo montáží materiálu. Zboží zùstává vlastnictvím dodavatele až do úplného zaplacení všech pohledávek.',
+
+    'img' => [
+        'logo' => __DIR__ . '/logo.png',
+        'carovy_kod' => __DIR__ . '/carovy_kod.png',
+        'razitko' => __DIR__ . '/stamp.png',
+    ],
 ];
 

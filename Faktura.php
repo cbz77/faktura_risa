@@ -10,16 +10,16 @@ class Faktura
         $pdf->AddPage();
         $pdf->SetAutoPageBreak(false);
 
-        self::frame($pdf);
+        self::frame($pdf, $data);
         self::header($pdf,$data);
         self::renderPolozky($pdf,$data);
         self::bottom($pdf,$data);
     }
 
     /* ========================================================== */
-    private static function frame(FPDF $pdf)
+    private static function frame(FPDF $pdf, $data = null)
     {
-        $pdf->Image(__DIR__.'/carovy_kod.png', 4, 8, 50);
+        $pdf->Image($data['img']['carovy_kod'], 4, 8, 50);
         $pdf->SetLineWidth(0.3);
         $pdf->Rect(5,15,200,277);
     }
@@ -48,7 +48,7 @@ class Faktura
         $pdf->SetXY(7,27);
 
         $pdf->SetFont('font','',16);
-        $pdf->Image(__DIR__.'/logo.png', $pdf->getX() + 70, $pdf->getY() + 5, 20);
+        $pdf->Image($data['img']['logo'], $pdf->getX() + 70, $pdf->getY() + 5, 20);
         $pdf->Cell(95,7,$dod['jmeno'],0,1);
 
         $pdf->SetFont('font','',11);
@@ -180,8 +180,8 @@ class Faktura
         $pdf->Line(68,113,68,128);
         $pdf->Line(131,113,131,128);
 
-        $pdf->SetXY(7,115);
-        $pdf->SetFont('font','',10);
+        $pdf->SetXY(7,114);
+        $pdf->SetFont('font','',9);
 
         $pdf->Cell(61,5,'Datum vystavení',0,0);
         $pdf->Cell(63,5,'Objednávka èíslo',0,0);
@@ -189,10 +189,10 @@ class Faktura
 
         $pdf->SetX(7);
 
-        $pdf->SetFont('font','B',10);
-        $pdf->Cell(61,7,$data['datum_vystaveni'],0,0);
-        $pdf->Cell(63,7,$data['objednavka_cislo'] ?? '',0,0);
-        $pdf->Cell(63,7,$data['faktura_cislo'] ?? '',0,1);
+        $pdf->SetFont('font','',12);
+        $pdf->Cell(61,7,$data['datum_vystaveni'],0,0, 'C');
+        $pdf->Cell(63,7,$data['objednavka_cislo'] ?? '',0,0, 'C');
+        $pdf->Cell(63,7,$data['faktura_cislo'] ?? '',0,1, 'C');
     }
 
     /* ========================================================== */
@@ -230,7 +230,7 @@ class Faktura
 
             if ($pocitadlo > 0 && $pocitadlo % self::POLOZEK_NA_STRANKU === 0) {
                 $pdf->AddPage();
-                self::frame($pdf);
+                self::frame($pdf, $data);
                 self::header($pdf,$data);
                 $pdf->SetXY(7,130);
                 self::renderPolozkyHeader($pdf);
@@ -314,14 +314,14 @@ class Faktura
         =====================
         */
 
-        $pdf->SetFont('font','',10);
-        $pdf->SetXY($col1 + 3,$y + 5);
+        $pdf->SetFont('font','',9);
+        $pdf->SetXY($col1 + 2,$y + 2);
         $pdf->Cell($colWidth - 6,6,'Vyhotovil:',0,1);
 
-        if(!empty($data['razitko']))
+        if(!empty($data['img']['razitko']))
         {
             $pdf->Image(
-                $data['razitko'],
+                $data['img']['razitko'],
                 $col1 + 10,
                 $y + 15,
                 $colWidth - 20
@@ -335,7 +335,7 @@ class Faktura
         =====================
         */
 
-        $pdf->SetXY($col2 + 3,$y + 5);
+        $pdf->SetXY($col2 + 2,$y + 2);
         $pdf->Cell($colWidth - 6,6,'Pøevzal:',0,1);
 
 
