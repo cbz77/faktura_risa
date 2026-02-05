@@ -19,33 +19,33 @@ class Faktura
     /* ========================================================== */
     private static function frame(FPDF $pdf)
     {
-        $pdf->Image(__DIR__.'/carovy_kod.png', 80, 8, 50);
+        $pdf->Image(__DIR__.'/carovy_kod.png', 4, 8, 50);
         $pdf->SetLineWidth(0.3);
-        $pdf->Rect(5,5,200,287);
+        $pdf->Rect(5,15,200,277);
     }
 
     /* ========================================================== */
     private static function header(FPDF $pdf,$data)
     {
-        $pdf->SetFont('font','B',16);
+        $pdf->SetFont('font','',16);
 
-        $pdf->SetXY(7,8);
+        $pdf->SetXY(7,16);
         $pdf->Cell(100,8,'DODACÍ LIST',0,0);
 
         $pdf->SetFont('font','',14);
         $pdf->Cell(90,8,$data['cislo_dokladu'],0,1,'R');
 
         // horní box
-        $pdf->Rect(5,18,200,75);
+        $pdf->Rect(5,25,200,78);
 
         $dod = $data['dodavatel'];
         $odb = $data['odberatel'];
 
         // rozdìlení boxu na 2 sloupce
-        $pdf->Line(105,18,105,93);
+        $pdf->Line(105,25,105,103);
 
         /* ===== DODAVATEL ===== */
-        $pdf->SetXY(7,20);
+        $pdf->SetXY(7,30);
 
         $pdf->SetFont('font','B',12);
         $pdf->Cell(95,6,$dod['jmeno'],0,1);
@@ -70,7 +70,7 @@ class Faktura
         }
 
         /* ===== ODBÌRATEL ===== */
-        $pdf->SetXY(107,20);
+        $pdf->SetXY(107,30);
 
         $pdf->SetFont('font','B',10);
         $pdf->Cell(90,6,'Dodací list pro:',0,1);
@@ -112,12 +112,12 @@ class Faktura
         }
 
         /* ===== øádek dat ===== */
-        $pdf->Rect(5,93,200,15);
+        $pdf->Rect(5,103,200,15);
 
-        $pdf->Line(68,93,68,108);
-        $pdf->Line(131,93,131,108);
+        $pdf->Line(68,103,68,118);
+        $pdf->Line(131,103,131,118);
 
-        $pdf->SetXY(7,95);
+        $pdf->SetXY(7,105);
         $pdf->SetFont('font','',10);
 
         $pdf->Cell(61,5,'Datum vystavení',0,0);
