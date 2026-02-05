@@ -19,9 +19,9 @@ class Faktura
     /* ========================================================== */
     private static function frame(FPDF $pdf, $data = null)
     {
-        $pdf->Image($data['img']['carovy_kod'], 9, 8, 50);
+        $pdf->Image($data['img']['carovy_kod'], 10, 8, 50);
         $pdf->SetLineWidth(0.5);
-        $pdf->Rect(10,15,190,277);
+        $pdf->Rect(10,15,190,267);
     }
 
     /* ========================================================== */
@@ -43,13 +43,13 @@ class Faktura
         $odb = $data['odberatel'];
 
         // rozdìlení boxu na 2 sloupce
-        $pdf->Line(105,25,105,113);
+        $pdf->Line(100,25,100,113);
 
         /* ===== DODAVATEL ===== */
         $pdf->SetXY(12,27);
 
         $pdf->SetFont('font','',16);
-        $pdf->Image($data['img']['logo'], $pdf->getX() + 70, $pdf->getY() + 5, 20);
+        $pdf->Image($data['img']['logo'], $pdf->getX() + 65, $pdf->getY() + 5, 20);
         $pdf->Cell(95,7,$dod['jmeno'],0,1);
 
         $pdf->SetFont('font','',11);
@@ -224,7 +224,7 @@ class Faktura
         $w = [70,15,10,20,25,20,20];
 
         // poèáteèní pozice tabulky
-        $pdf->SetXY(30,130);
+        $pdf->SetXY(30,135);
 
         self::renderPolozkyHeader($pdf);
 
@@ -234,7 +234,7 @@ class Faktura
                 $pdf->AddPage();
                 self::frame($pdf, $data);
                 self::header($pdf,$data);
-                $pdf->SetXY(30,130);
+                $pdf->SetXY(30,135);
                 self::renderPolozkyHeader($pdf);
             }
 
@@ -296,7 +296,7 @@ class Faktura
     {
         $s = $data['soucty'];
 
-        $y = 245;
+        $y = 235;
 
         $pageX = 10;
         $pageWidth = 190;
@@ -310,8 +310,8 @@ class Faktura
         $pdf->Rect($pageX,$y,$pageWidth,47);
 
         // ===== vertikální dìlení =====
-        $pdf->Line($col2,$y,$col2,292);
-        $pdf->Line($col3,$y,$col3,292);
+        $pdf->Line($col2,$y,$col2,282);
+        $pdf->Line($col3,$y,$col3,282);
 
 
         /*
