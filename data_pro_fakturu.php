@@ -6,8 +6,8 @@ $data_pro_fakturu = [
     'cislo_dokladu' => 'DL-2023-0001',
     'typ_dokladu' => 'faktura',
     'datum_vystaveni' => '28.4.2023',
-    'objednavka_cislo' => null,
-    'faktura_cislo' => null,
+    'objednavka_cislo' => '123456-XYZ-1234567890',
+    'faktura_cislo' => '123456-XYZ-1234567890',
 
     // DODAVATEL
     'dodavatel' => [
@@ -18,7 +18,7 @@ $data_pro_fakturu = [
         'stat' => 'Èeská republika',
         'ico' => '83125649',
         'dic' => 'CZ83125649',
-        'platce_dph' => true,
+        'platce_dph' => "Plátce DPH",
         'telefon' => '+420 (466) 2200 0001',
         'email' => 'info@hammermasters.cz',
         'web' => 'www.hammermasters.cz',
@@ -53,13 +53,13 @@ $data_pro_fakturu = [
     // POLOŽKY – PØESNÌ PODLE TABULKY
     'polozky' => [
         [
-            'popis' => 'Cihla broušená Porotherm (500x250x150 mm)',
+            'popis' => 'Cihla broušená Porotherm (500x250x150 mm) Cihla broušená Porotherm (500x250x150 mm)',
             'mnozstvi' => 250,
             'mj' => 'ks',
             'cena_za_mj' => 82.64,
-            'bez_dph' => 20661.16,
+            'bez_dph' => 120661.16,
             'dph_sazba' => 21,
-            's_dph' => 25000.00,
+            's_dph' => 125000.00,
         ],
         [
             'popis' => 'Hydroizolaèní fólie (30 m2)',
@@ -198,7 +198,12 @@ $data_pro_fakturu = [
     ],
 
     // PATIÈKA
-    'poznamka' =>
-        'Dodavatel neodpovídá za škody vzniklé neodborným zacházením, skladováním nebo montáží materiálu. Zboží zùstává vlastnictvím dodavatele až do úplného zaplacení všech pohledávek.',
+    'poznamka' => 'Dodavatel neodpovídá za škody vzniklé neodborným zacházením, skladováním nebo montáží materiálu. Zboží zùstává vlastnictvím dodavatele až do úplného zaplacení všech pohledávek.',
+
+    'img' => [
+        'logo' => __DIR__ . '/logo.png',
+        'carovy_kod' => __DIR__ . '/carovy_kod.png',
+        'razitko' => __DIR__ . '/stamp.png',
+    ],
 ];
 
