@@ -36,43 +36,77 @@ class Faktura
         $pdf->Cell(90,8,$data['cislo_dokladu'],0,1,'R');
 
         // horní box
-        $pdf->Rect(5,25,200,78);
+        $pdf->Rect(5,25,200,88);
 
         $dod = $data['dodavatel'];
         $odb = $data['odberatel'];
 
         // rozdìlení boxu na 2 sloupce
-        $pdf->Line(105,25,105,103);
+        $pdf->Line(105,25,105,113);
 
         /* ===== DODAVATEL ===== */
-        $pdf->SetXY(7,30);
+        $pdf->SetXY(7,27);
 
-        $pdf->SetFont('font','B',12);
-        $pdf->Cell(95,6,$dod['jmeno'],0,1);
+        $pdf->SetFont('font','',16);
+        $pdf->Cell(95,7,$dod['jmeno'],0,1);
+
+        $pdf->SetFont('font','',11);
+        $pdf->SetX(7);
+        $pdf->Cell(95,4,$dod['ulice'],0,1);
+        $pdf->SetX(7);
+        $pdf->Cell(95,4,$dod['psc'].' '.$dod['mesto'],0,1);
+        $pdf->SetX(7);
+        $pdf->Cell(95,4,$dod['stat'],0,1);
 
         $pdf->SetFont('font','',10);
-        $pdf->Cell(95,5,$dod['ulice'],0,1);
-        $pdf->Cell(95,5,$dod['psc'].' '.$dod['mesto'],0,1);
-        $pdf->Cell(95,5,$dod['stat'],0,1);
-
         $pdf->Ln(2);
-        $pdf->Cell(95,5,'IÈO: '.$dod['ico'],0,1);
-        $pdf->Cell(95,5,'DIÈ: '.$dod['dic'],0,1);
+        $pdf->SetX(7);
+
+        $pdf->MultiCell(65,4,$dod['registrace'],0,1);
+
+        $pdf->SetFont('font','',11);
+        $pdf->SetX(7);
+        $pdf->Ln(2);
+
+        $pdf->SetX(7);
+        $pdf->Cell(95,4,'IÈO: '.$dod['ico'],0,1);
+        $pdf->SetX(7);
+        $pdf->Cell(95,4,'DIÈ: '.$dod['dic'],0,1);
+        $pdf->SetX(7);
+        $pdf->Cell(95,4,$dod['platce_dph'],0,1);
+
+        $pdf->SetFont('font','',9);
+        $pdf->SetX(7);
+        $pdf->Ln(2);
+
+        $pdf->SetX(7);
+        $pdf->Cell(95,4,'TELEFON: '.$dod['telefon'],0,1);
+        $pdf->SetX(7);
+        $pdf->Cell(95,4,'E-MAIL: '.$dod['email'],0,1);
+        $pdf->SetX(7);
+        $pdf->Cell(95,4,'WEB: '.$dod['web'],0,1);
 
         if (!empty($data['banka']))
         {
             $b = $data['banka'];
 
             $pdf->Ln(2);
-            $pdf->Cell(95,5,'ÚÈET: '.$b['ucet'],0,1);
-            $pdf->Cell(95,5,'IBAN: '.$b['iban'],0,1);
-            $pdf->Cell(95,5,'SWIFT: '.$b['swift'],0,1);
+            $pdf->SetX(7);
+            $pdf->Cell(95,4,'ÚÈET: '.$b['ucet'],0,1);
+            $pdf->SetX(7);
+            $pdf->SetFont('font','B',9);
+            $pdf->Cell(95,4,'BANKA: '.$b['nazev'],0,1);
+            $pdf->SetX(7);
+            $pdf->SetFont('font','',9);
+            $pdf->Cell(95,4,'IBAN: '.$b['iban'],0,1);
+            $pdf->SetX(7);
+            $pdf->Cell(95,4,'SWIFT: '.$b['swift'],0,1);
         }
 
         /* ===== ODBÌRATEL ===== */
         $pdf->SetXY(107,30);
 
-        $pdf->SetFont('font','B',10);
+        $pdf->SetFont('font','',9);
         $pdf->Cell(90,6,'Dodací list pro:',0,1);
 
         $pdf->SetFont('font','',11);
@@ -96,7 +130,7 @@ class Faktura
 
             $pdf->Ln(4);
             $pdf->SetX(107);
-            $pdf->SetFont('font','B',10);
+            $pdf->SetFont('font','',9);
             $pdf->Cell(90,6,'Dodací adresa:',0,1);
 
             $pdf->SetFont('font','',11);
@@ -112,12 +146,12 @@ class Faktura
         }
 
         /* ===== øádek dat ===== */
-        $pdf->Rect(5,103,200,15);
+        $pdf->Rect(5,113,200,15);
 
-        $pdf->Line(68,103,68,118);
-        $pdf->Line(131,103,131,118);
+        $pdf->Line(68,113,68,128);
+        $pdf->Line(131,113,131,128);
 
-        $pdf->SetXY(7,105);
+        $pdf->SetXY(7,115);
         $pdf->SetFont('font','',10);
 
         $pdf->Cell(61,5,'Datum vystavení',0,0);
