@@ -30,20 +30,20 @@ class Faktura
         $pdf->SetLineWidth(0.2);
         $pdf->SetFont('font','',16);
 
-        $pdf->SetXY(12,16);
-        $pdf->Cell(100,8,'DODACÍ LIST',0,0);
+        $pdf->SetXY(10,16);
+        $pdf->Cell(100,7,'DODACÍ LIST',0,0);
 
-        $pdf->SetFont('font','',14);
-        $pdf->Cell(85,8,$data['cislo_dokladu'],0,1,'R');
+        $pdf->SetFont('font','',16);
+        $pdf->Cell(87,7,$data['cislo_dokladu'],0,1,'R');
 
         // horní box
-        $pdf->Rect(10,25,190,88);
+        $pdf->Rect(10,23,190,90);
 
         $dod = $data['dodavatel'];
         $odb = $data['odberatel'];
 
         // rozdìlení boxu na 2 sloupce
-        $pdf->Line(100,25,100,113);
+        $pdf->Line(100,23,100,113);
 
         /* ===== DODAVATEL ===== */
         $pdf->SetXY(12,27);
@@ -176,15 +176,16 @@ class Faktura
         }
 
         /* ===== øádek dat ===== */
-        $pdf->Rect(10,113,190,15);
+        $pdf->Rect(10,113,190,12);
 
-        $pdf->Line(68,113,68,128);
-        $pdf->Line(131,113,131,128);
+        $pdf->Line(68,113,68,125);
+        $pdf->Line(131,113,131,125);
 
-        $pdf->SetXY(12,114);
+        $pdf->SetXY(11,113);
         $pdf->SetFont('font','',9);
 
         $pdf->Cell(61,5,'Datum vystavení',0,0);
+        $pdf->setX($pdf->GetX() - 3);
         $pdf->Cell(63,5,'Objednávka èíslo',0,0);
         $pdf->Cell(63,5,'Faktura èíslo',0,1);
 
@@ -224,7 +225,7 @@ class Faktura
         $w = [70,15,10,20,25,20,20];
 
         // poèáteèní pozice tabulky
-        $pdf->SetXY(30,135);
+        $pdf->SetXY(30,130);
 
         self::renderPolozkyHeader($pdf);
 
@@ -234,7 +235,7 @@ class Faktura
                 $pdf->AddPage();
                 self::frame($pdf, $data);
                 self::header($pdf,$data);
-                $pdf->SetXY(30,135);
+                $pdf->SetXY(30,130);
                 self::renderPolozkyHeader($pdf);
             }
 
