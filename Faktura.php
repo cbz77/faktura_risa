@@ -170,23 +170,30 @@ class Faktura
 
     private static function renderPolozkyHeader(FPDF $pdf): void
     {
-        $pdf->SetFont('font','B',9);
+        $w = [80,15,10,20,25,20,20];
 
-        $pdf->Cell(95,7,'Popis položky',1);
-        $pdf->Cell(15,7,'Množství',1,0,'R');
-        $pdf->Cell(10,7,'MJ',1,0,'C');
-        $pdf->Cell(25,7,'Cena za MJ',1,0,'R');
-        $pdf->Cell(30,7,'Celkem bez DPH',1,0,'R');
-        $pdf->Cell(10,7,'DPH',1,0,'R');
-        $pdf->Cell(30,7,'Celkem s DPH',1,1,'R');
+        $pdf->SetFont('font','',8);
+        $pdf->SetX(10);
 
-        $pdf->SetFont('font','',9);
+        $pdf->Cell($w[0],7,'Popis položky',1,0,'C');
+        $pdf->Cell($w[1],7,'Množství',1,0,'C');
+        $pdf->Cell($w[2],7,'MJ',1,0,'C');
+        $pdf->Cell($w[3],7,'Cena za MJ',1,0,'C');
+        $pdf->Cell($w[4],7,'Celkem bez DPH',1,0,'C');
+        $pdf->Cell($w[5],7,'DPH',1,0,'C');
+        $pdf->Cell($w[6],7,'Celkem s DPH',1,1,'C');
+
+        $pdf->SetFont('font','',8);
     }
 
     /* ========================================================== */
    private static function renderPolozky(FPDF $pdf, array $data): void
     {
         $pocitadlo = 0;
+        $w = [80,15,10,20,25,20,20];
+
+        // poèáteèní pozice tabulky
+        $pdf->SetXY(7,130);
 
         self::renderPolozkyHeader($pdf);
 
@@ -196,24 +203,25 @@ class Faktura
                 $pdf->AddPage();
                 self::frame($pdf);
                 self::header($pdf,$data);
+                $pdf->SetXY(7,130);
                 self::renderPolozkyHeader($pdf);
             }
 
+            $xStart = $pdf->GetX();
             $yStart = $pdf->GetY();
 
-            // Popis – MultiCell
-            $pdf->MultiCell(95,6,$polozka['popis'],1);
+            $pdf->MultiCell($w[0],6,$polozka['popis'],1);
 
-            $height = $pdf->GetY() - $yStart;
+            $h = $pdf->GetY() - $yStart;
 
-            $pdf->SetXY(100,$yStart);
+            $pdf->SetXY($xStart + $w[0], $yStart);
 
-            $pdf->Cell(15,$height,$polozka['mnozstvi'],1,0,'R');
-            $pdf->Cell(10,$height,$polozka['mj'],1,0,'C');
-            $pdf->Cell(25,$height,number_format($polozka['cena_za_mj'],2,',',' '),1,0,'R');
-            $pdf->Cell(30,$height,number_format($polozka['bez_dph'],2,',',' '),1,0,'R');
-            $pdf->Cell(10,$height,$polozka['dph_sazba'].'%',1,0,'R');
-            $pdf->Cell(30,$height,number_format($polozka['s_dph'],2,',',' '),1,1,'R');
+            $pdf->Cell($w[1],$h,$polozka['mnozstvi'],1,0,'C');
+            $pdf->Cell($w[2],$h,$polozka['mj'],1,0,'C');
+            $pdf->Cell($w[3],$h,number_format($polozka['cena_za_mj'],2,',',' '),1,0,'C');
+            $pdf->Cell($w[4],$h,number_format($polozka['bez_dph'],2,',',' '),1,0,'C');
+            $pdf->Cell($w[5],$h,$polozka['dph_sazba'].'%',1,0,'C');
+            $pdf->Cell($w[6],$h,number_format($polozka['s_dph'],2,',',' '),1,1,'C');
 
             $pocitadlo++;
         }
@@ -228,13 +236,10 @@ class Faktura
 
         $pdf->SetFont('font','B',9);
 
-        // slouèené první 4 sloupce
-        $pdf->Cell(95+15+10+25,7,'Celkem:',1,0,'R');
-
-        // souèty
-        $pdf->Cell(30,7,number_format($s['bez_dph'],2,',',' '),1,0,'R');
-        $pdf->Cell(10,7,number_format($s['dph'],2,',',' '),1,0,'R');
-        $pdf->Cell(30,7,number_format($s['s_dph'],2,',',' '),1,1,'R');
+        $pdf->Cell(80+15+10+20,7,'Celkem:',1,0,'R');
+        $pdf->Cell(25,7,number_format($s['bez_dph'],2,',',' '),1,0,'C');
+        $pdf->Cell(20,7,number_format($s['dph'],2,',',' '),1,0,'C');
+        $pdf->Cell(20,7,number_format($s['s_dph'],2,',',' '),1,1,'C');
 
         $pdf->SetFont('font','',9);
 
@@ -245,16 +250,11 @@ class Faktura
         */
 
         if (!empty($data['poznamka'])) {
-
             $pdf->Ln(4);
-
-            $pdf->MultiCell(
-                0,
-                5,
-                $data['poznamka']
-            );
+            $pdf->MultiCell(0,5,$data['poznamka']);
         }
     }
+
 
     /* ========================================================== */
     private static function bottom(FPDF $pdf,$data)

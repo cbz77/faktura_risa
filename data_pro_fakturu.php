@@ -53,13 +53,13 @@ $data_pro_fakturu = [
     // POLOŽKY – PØESNÌ PODLE TABULKY
     'polozky' => [
         [
-            'popis' => 'Cihla broušená Porotherm (500x250x150 mm)',
+            'popis' => 'Cihla broušená Porotherm (500x250x150 mm) Cihla broušená Porotherm (500x250x150 mm)',
             'mnozstvi' => 250,
             'mj' => 'ks',
             'cena_za_mj' => 82.64,
-            'bez_dph' => 20661.16,
+            'bez_dph' => 120661.16,
             'dph_sazba' => 21,
-            's_dph' => 25000.00,
+            's_dph' => 125000.00,
         ],
         [
             'popis' => 'Hydroizolaèní fólie (30 m2)',
