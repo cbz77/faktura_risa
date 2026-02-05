@@ -234,7 +234,7 @@ class Faktura
 
         $s = $data['soucty'];
 
-        $pdf->SetFont('font','B',9);
+        $pdf->SetFont('font','',9);
 
         $pdf->Cell(80+15+10+20,7,'Celkem:',1,0,'R');
         $pdf->Cell(25,7,number_format($s['bez_dph'],2,',',' '),1,0,'C');
@@ -316,55 +316,77 @@ class Faktura
         =====================
         */
 
-        $x = $col3 + 3;
-        $yy = $y + 5;
+        $x  = $col3;
+        $yy = $y;
 
-        $pdf->SetFont('font','',10);
+        $labelW = $colWidth - 25;
+        $valueW = 25;
+        $rowH   = 7;
 
-        // bez DPH
+        /*
+        ---------------------
+        HORNÍ TABULKA SOUÈTÙ
+        ---------------------
+        */
+
+        $pdf->SetFont('font','',9);
+
+        // Bez DPH
         $pdf->SetXY($x,$yy);
-        $pdf->Cell($colWidth - 40,7,'Celková èástka bez DPH:',0,0);
-        $pdf->Cell(37,7,number_format($s['bez_dph'],2,',',' ').' Kè',0,1,'R');
+        $pdf->Cell($labelW,$rowH,'Celková èástka bez DPH:',1,0);
+        $pdf->Cell($valueW,$rowH,number_format($s['bez_dph'],2,',',' ').' Kè',1,1,'R');
 
         // DPH
-        $yy += 7;
+        $pdf->SetX($x);
+        $pdf->Cell($labelW,$rowH,'DPH:',1,0);
+        $pdf->Cell($valueW,$rowH,number_format($s['dph'],2,',',' ').' Kè',1,1,'R');
+
+        // S DPH
+        $pdf->SetX($x);
+        $pdf->Cell($labelW,$rowH,'Celková èástka s DPH:',1,0);
+        $pdf->Cell($valueW,$rowH,number_format($s['s_dph'],2,',',' ').' Kè',1,1,'R');
+
+        /*
+        ---------------------
+        CELKEM
+        ---------------------
+        */
+
+        $yy = $pdf->GetY();
+
+        // popisek
+        $pdf->SetFont('font','',9);
         $pdf->SetXY($x,$yy);
-        $pdf->Cell($colWidth - 40,7,'DPH:',0,0);
-        $pdf->Cell(37,7,number_format($s['dph'],2,',',' ').' Kè',0,1,'R');
+        $pdf->Cell($colWidth,6,'Celkem:',0,1,'L');
 
-        // s DPH
-        $yy += 7;
-        $pdf->SetXY($x,$yy);
-        $pdf->Cell($colWidth - 40,7,'Celková èástka s DPH:',0,0);
-        $pdf->Cell(37,7,number_format($s['s_dph'],2,',',' ').' Kè',0,1,'R');
-
-
-        // CELKEM
-        $yy += 12;
-
-        $pdf->SetXY($x,$yy);
-        $pdf->Cell($colWidth - 6,6,'Celkem:',0,1);
-
+        // velká èástka
         $yy += 6;
-
         $pdf->SetFont('font','B',16);
         $pdf->SetXY($x,$yy);
-        $pdf->Cell($colWidth - 6,9,
+        $pdf->Cell(
+            $colWidth,
+            10,
             number_format($s['s_dph'],2,',',' ').' Kè',
-            0,1,'R'
+            0,
+            1,
+            'R'
         );
 
+        // èástka slovy
         $yy += 10;
-
         $pdf->SetFont('font','',9);
         $pdf->SetXY($x,$yy);
         $pdf->MultiCell(
-            $colWidth - 6,
+            $colWidth,
             5,
             $s['slovy'],
             0,
             'R'
         );
+
+
+
+
     }
 
 
