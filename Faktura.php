@@ -48,6 +48,7 @@ class Faktura
         $pdf->SetXY(7,27);
 
         $pdf->SetFont('font','',16);
+        $pdf->Image(__DIR__.'/logo.png', $pdf->getX() + 70, $pdf->getY() + 5, 20);
         $pdf->Cell(95,7,$dod['jmeno'],0,1);
 
         $pdf->SetFont('font','',11);
