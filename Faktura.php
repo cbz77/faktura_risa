@@ -133,24 +133,24 @@ class Faktura
         }
 
         /* ===== ODBÌRATEL ===== */
-        $pdf->SetXY(106,26);
+        $pdf->SetXY(103,26);
 
         $pdf->SetFont('font','',9);
         $pdf->Cell(90,5,'Dodací list pro:',0,1);
 
         $pdf->SetFont('font','',14);
 
-        $pdf->SetXY(117, $pdf->getY() + 6);
+        $pdf->SetXY(113, $pdf->getY() + 6);
         $pdf->MultiCell(70,5,$odb['jmeno'],0,1);
 
-        $pdf->SetX(117);
+        $pdf->SetX(113);
         $pdf->SetFont('font','',12);
         $pdf->Cell(90,5,$odb['ulice'],0,1);
 
-        $pdf->SetX(117);
+        $pdf->SetX(113);
         $pdf->Cell(90,5,$odb['psc'].' '.$odb['mesto'],0,1);
 
-        $pdf->SetX(117);
+        $pdf->SetX(113);
         $pdf->Cell(90,5,$odb['stat'],0,1);
 
         // dodací adresa
@@ -159,19 +159,19 @@ class Faktura
             $da = $data['dodaci_adresa'];
 
             $pdf->Ln(4);
-            $pdf->SetX(106);
+            $pdf->SetX(103);
             $pdf->SetFont('font','',9);
             $pdf->Cell(90,5,'Dodací adresa:',0,1);
 
             $pdf->SetFont('font','',12);
 
-            $pdf->SetXY(117, $pdf->getY() + 2);
+            $pdf->SetXY(113, $pdf->getY() + 2);
             $pdf->Cell(90,5,$da['jmeno'],0,1);
 
-            $pdf->SetX(117);
+            $pdf->SetX(113);
             $pdf->Cell(90,5,$da['ulice'],0,1);
 
-            $pdf->SetX(117);
+            $pdf->SetX(113);
             $pdf->Cell(90,5,$da['psc'].' '.$da['mesto'],0,1);
         }
 
